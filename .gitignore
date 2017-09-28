@@ -1,2 +1,10 @@
-*.class
-*.log
+# Gradle
+gradle.local.properties
+build
+build-support
+.gradle
+
+.idea
+*.iml
+
+.DS_Store
