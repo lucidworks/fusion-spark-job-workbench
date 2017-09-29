@@ -6,7 +6,7 @@ set -e
 # Find location of this script
 sdir="$(dirname "${BASH_SOURCE-$0}")"
 
-FUSION_API=http://localhost:8080/api/v1
+FUSION_API=http://localhost:8765/api/v1
 
 FILE_NAME=$1
 BLOB_NAME=

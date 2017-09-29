@@ -6,15 +6,11 @@ buildscript {
 
 plugins {
     id "com.github.johnrengelman.shadow" version "2.0.0"
-//    id "com.github.johnrengelman.shadow" version '2.0.0'
     id 'scala'
     id 'java'
     id 'idea'
     id 'eclipse'
 }
-
-// Relocates everything by default. Comment out to avoid relocation
-//apply plugin: 'com.github.johnrengelman.plugin-shadow'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -24,21 +20,29 @@ repositories {
     mavenCentral()
 }
 
-shadowJar {
-    configurations = [project.configurations.compile]
-    exclude 'org.eclipse.swt'
+subprojects {
+    apply plugin: "com.github.johnrengelman.shadow"
+    // Relocates everything by default. Comment out to avoid relocation
+    apply plugin: "scala"
+    apply plugin: "java"
+    apply plugin: 'com.github.johnrengelman.plugin-shadow'
+
     dependencies {
-//        exclude getLibs()
+        compileOnly getLibs()
+        testCompile 'org.scalatest:scalatest_2.11:3.0.0'
+        testCompile 'junit:junit:4.12'
+        testCompile getLibs()
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    shadowJar {
+        configurations = [project.configurations.compile]
+        dependencies {}
     }
 }
-
-dependencies {
-    compileOnly getLibs()
-    testCompile 'org.scalatest:scalatest_2.11:3.0.0'
-    testCompile 'junit:junit:4.12'
-    testCompile getLibs()
-}
-
 
 project.ext.dcFusionHome = {
     def dcFusionHome = null
@@ -66,49 +70,13 @@ project.ext.dcFusionHome = {
     return dcFusionHome
 }()
 
-project.ext.dcFusionLibHome = {
-    def dcFusionLibHome = null
-
-    try {
-        dcFusionLibHome = project.getProperty("dcFusionLibHome")
-    } catch (MissingPropertyException e) {
-        logger.warn("\tThe variable 'dcFusionLibHome' is not defined in the ~/.gradle/gradle.properties")
-    }
-
-    def dcFusionLibHomeD = System.getProperty('dcFusionLibHome')
-    if (dcFusionLibHomeD) {
-        dcFusionLibHome = dcFusionLibHomeD
-    }
-
-    if (!dcFusionLibHome) {
-        logger.warn("\tThe variable 'dcFusionLibHome' isn't defined neither " +
-                "in ~/.gradle/gradle.properties nor as -DdcFusionLibHome. Using 'dcFusionHome' as 'dcFusionLibHome' instead")
-        return dcFusionHome
-    }
-
-    if (dcFusionLibHome.endsWith("/")) {
-        fusionLibHome = dcFusionLibHome.substring(0, dcFusionLibHome.length() - 1)
-    }
-
-    return dcFusionLibHome
-}()
-
 def getLibs() {
     def sparkJars = fileTree(
-            dir: getSparkLibDir(dcFusionLibHome),
+            dir: getSparkLibDir(dcFusionHome),
             includes: ["*.jar"]
     )
     def libsJars = files(sparkJars.files.collect { dep -> dep.getPath()})
     return libsJars
-}
-
-def getLibsDir(baseDir) {
-    if (!file(baseDir).isDirectory()) {
-        throw new FileNotFoundException("Fusion home directory '${baseDir}' does not exist. To build, add " +
-                "-DdcFusionHome=<fusion_location> and/or -DdcFusionLibHome=<fusionLib_location>")
-    } else {
-        return "${baseDir}/apps/libs"
-    }
 }
 
 def getSparkLibDir(baseDir) {
