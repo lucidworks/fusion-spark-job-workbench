@@ -34,7 +34,6 @@ shadowJar {
 
 dependencies {
     compileOnly getLibs()
-    compile group: 'org.eclipse.rap', name: 'org.eclipse.rap.jface', version: '3.3.0'
     testCompile 'org.scalatest:scalatest_2.11:3.0.0'
     testCompile 'junit:junit:4.12'
     testCompile getLibs()
