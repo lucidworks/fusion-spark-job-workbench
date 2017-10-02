@@ -1,0 +1,75 @@
+= Fusion Spark Job Workbench
+:toc:
+:toclevels: 4
+:toc-placement!:
+:toc-title:
+
+Development kit for building custom Spark jobs for Lucidworks Fusion. Using this repo, one can develop a custom Spark, Java or python Spark code that can be deployed to Fusion and run as a Spark job. 
+
+toc::[]
+
+= Getting started
+
+== Java/Scala
+
+=== Configuring project
+
+==== The fusion home directory
+The workbench grabs the dependencies available for your project out of an unpacked instance of Fusion. Define `dcFusionHome` with your fusion installation path inside https://github.com/lucidworks/fusion-spark-job-workbench/blob/master/gradle.properties[gradle.properties] file in this repo
+
+==== Example module
+Example module https://github.com/lucidworks/fusion-spark-job-workbench/tree/master/count_example/src/main[count_example] provided in this workbench includes a scala, java code for counting documents inside a collection.
+
+==== Defining a new module
+Create a new folder in the base directory. The name you give this folder will by default be the name of the jar file produced by your module. 
+
+==== build.gradle
+In your new module directory, create the file `build.gradle`. Here you can define extra dependencies in the standard gradle fashion. 
+You can also define any additional dependencies your module might have through the normal gradle dependency syntax, e.g. `dependencies { compile 'group:artifact:1.0.0' }`
+
+Additionally, if you stick a folder called `lib` in your module, a jar `lib/filename.jar` that will also be available using `compile ':filename'` syntax in your dependency declaration.
+
+==== settings.gradle
+You will need to add the name of your module to `settings.gradle` in the root directory using an `include` declaration. If you are using IntelliJ, this will happen automatically when you select "New -> Module"
+
+=== Developing code
+Only requirement is that there is a entry class defined with a `main` method. See `count_example` module for code examples.
+
+=== Shaded jar
+After you have finished developing the application, produce a shaded jar by running gradle command `./gradlew clean :{module_name}:shadow`.  The command produces shaded jar in `{module_name}/build/libs` folder. All dependencies are shaded by default.
+
+```
+Example:  ./gradlew clean :count_example:shadow
+```
+
+=== Upload shaded jar to Fusion
+Once the shaded jar is produced, upload it to Fusion using the bash script `./upload_resource.sh {jar_location}`. This command prints out the output in verbose mode. The response status should be 200 and the headers in the output response show the name of the blob resource that represents the jar file.
+
+```
+Example: ./upload_resource.sh count_example/build/libs/count_example-all.jar 
+```
+
+== Python
+
+=== Adding pyspark dependency to IntelliJ
+For code completion and highlighting, install pyspark into the system python libs or into a virtualenv using `pip install pyspark`. Import the virtualenv into the IntellIJ module or as a project Library.
+
+=== Developing code
+See https://github.com/lucidworks/fusion-spark-job-workbench/blob/master/python_examples/count_docs.py[count_docs.py] for example code to get started
+
+=== Uploading to Fusion
+Upload the python script to fusion using `./upload_resource.sh {python_file}`. This command prints out the output in verbose mode. The response status should be 200 and the headers in the output response show the name of the blob resource that represents the python file.
+
+== Running custom job inside Fusion
+
+Fusion UI -> Jobs panel -> 'Add +' -> 'Custom Spark Job' -> Define job configuration -> Run -> Start
+
+For Java/Scala code, define the name of uploaded blob jar and also the Main class that servers as entry point.
+
+For python code, define the name of the blob resource in job config.
+
+=== Debugging custom spark job
+
+* Log file for custom spark jobs is located at `${FUSION_HOME}/var/log/api/spark-launcher.log`.
+* In addition to this, two files `error.log` and `output.log` are also available while the job is running. These two files can be located at `${FUSION_HOME}/var/api/spark/spark-workDir-{}/spark-launcher-{}`. The `spark-launcher-{}` directory is removed after the job finishes
+* Once the job finishes, the error and output files are available via Fusion endpoint. `http://localhost:8764/api/apollo/spark/jobs/{job_id}/error` and `http://localhost:8764/api/apollo/spark/jobs/{job_id}/output`
