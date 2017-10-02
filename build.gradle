@@ -82,7 +82,7 @@ def getLibs() {
 def getSparkLibDir(baseDir) {
     if (!file(baseDir).isDirectory()) {
         throw new FileNotFoundException("Fusion home directory '${baseDir}' does not exist. To build, add " +
-                "-DdcFusionHome=<fusion_location> and/or -DdcFusionLibHome=<fusionLib_location>")
+                "-DdcFusionHome=<fusion_location>")
     } else {
         return "${baseDir}/apps/spark/lib"
     }
