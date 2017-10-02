@@ -16,4 +16,4 @@ if [ -z ${FILE_NAME} ]; then
   exit
 fi
 BLOB_NAME="${FILE_NAME##*/}"
-curl -vX PUT ${FUSION_API}/blobs/${BLOB_NAME} -F "data=@${FILE_NAME}"
+curl -vX PUT ${FUSION_API}/blobs/${BLOB_NAME} --upload-file ${FILE_NAME} -H "Content-type: application/octet-stream"
