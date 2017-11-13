@@ -21,6 +21,7 @@ object CountDocsInCollection {
     val df = spark.read.format("solr").option("collection", "logs").load()
 //    df.count()
     logger.info("Document count is  " + df.count())
+    spark.stop()
   }
 
 }

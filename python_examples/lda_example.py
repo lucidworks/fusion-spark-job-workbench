@@ -1,11 +1,11 @@
+from pyspark.ml.clustering import LDA
 from pyspark.sql import SparkSession
 
 spark = SparkSession \
     .builder \
-    .appName("Python basic example") \
+    .appName("LDA example") \
     .getOrCreate()
 
 df = spark.read.format("solr").option("collection", "logs").load()
-print("No. of docs in logs collection {}".format(df.count()))
-spark.stop()
 
+lda = LDA(k=10, maxIter=10)
