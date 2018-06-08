@@ -18,7 +18,8 @@ toc::[]
 The workbench grabs the dependencies available for your project out of an unpacked instance of Fusion. Define `dcFusionHome` with your fusion installation path inside https://github.com/lucidworks/fusion-spark-job-workbench/blob/master/gradle.properties[gradle.properties] file in this repo
 
 ==== Example module
-Example module https://github.com/lucidworks/fusion-spark-job-workbench/tree/master/count_example/src/main[count_example] provided in this workbench includes a scala, java code for counting documents inside a collection.
+Example module https://github.com/lucidworks/fusion-spark-job-workbench/tree/master/collection-transfer-app provided in this workbench includes a scala code for transfering data from one collection to other Fusion clusters
+Another example module https://github.com/lucidworks/fusion-spark-job-workbench/tree/master/count_example is a dummy example for count docs in a collection (Written in Java/Scala both)
 
 ==== Defining a new module
 Create a new folder in the base directory. The name you give this folder will by default be the name of the jar file produced by your module. 
@@ -33,20 +34,20 @@ Additionally, if you stick a folder called `lib` in your module, a jar `lib/file
 You will need to add the name of your module to `settings.gradle` in the root directory using an `include` declaration. If you are using IntelliJ, this will happen automatically when you select "New -> Module"
 
 === Developing code
-Only requirement is that there is a entry class defined with a `main` method. See `count_example` module for code examples.
+Only requirement is that there is a entry class defined with a `main` method. See `count_example` and `collection-transfer-app` module for code examples.
 
 === Shaded jar
 After you have finished developing the application, produce a shaded jar by running gradle command `./gradlew clean :{module_name}:shadow`.  The command produces shaded jar in `{module_name}/build/libs` folder. All dependencies are shaded by default.
 
 ```
-Example:  ./gradlew clean :count_example:shadow
+Example:  ./gradlew clean :collection-transfer-app:shadow
 ```
 
 === Upload shaded jar to Fusion
 Once the shaded jar is produced, upload it to Fusion using the bash script `./upload_resource.sh {jar_location}`. This command prints out the output in verbose mode. The response status should be 200 and the headers in the output response show the name of the blob resource that represents the jar file.
 
 ```
-Example: ./upload_resource.sh count_example/build/libs/count_example-all.jar 
+Example: ./upload_resource.sh collection-transfer-app/build/libs/collection-transfer-app-all.jar
 ```
 
 == Python
