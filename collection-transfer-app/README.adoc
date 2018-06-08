@@ -11,7 +11,7 @@ You'll need Fusion 3.1.3+
 _Note: All below actions have to be performed from repo home folder_
 
 * Compile the jar using gradle command `./gradlew clean :collection-transfer-app:shadow`
-* Upload the jar to Blob store ` ./upload_resource.sh collection-transfer-app/build/libs/collection-transfer-app-all.jar`
+* Upload the jar to Blob store `./upload_resource.sh collection-transfer-app/build/libs/collection-transfer-app-all.jar`
 * Go to 'Jobs' panel in Fusion UI and add a job of type 'Custom Spark Job'
 * Add jar name as the blob resource and `com.lucidworks.spark.CollectionTransferApp` as class name (See below screenshot)
 * Click on 'Advanced' and add required options to the 'Spark args' section (See below screenshot)
