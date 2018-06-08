@@ -1,8 +1,5 @@
 package com.lucidworks.spark.examples
 
-import com.lucidworks.apollo.client.resources.{BlobClientResource, CollectionClientResource}
-import com.lucidworks.spark.FusionClient
-import com.lucidworks.spark.util.FusionUtil
 import org.apache.spark.sql.SparkSession
 import org.slf4j.LoggerFactory
 
@@ -21,7 +18,7 @@ object CountDocsInCollection {
 //    logger.info(s"Spark conf dump: ${spark.sparkContext.getConf.toDebugString}")
 //    logger.info(s"System properties: ${System.getProperties.keySet()}")
 //    logger.info(s"Env properties: ${System.getenv().keySet()}")
-    val df = spark.read.format("solr").option("collection", "system_logs").load()
+    val df = spark.read.format("solr").option("collection", "system_history").load()
 //    df.count()
     logger.info("Document count is  " + df.count())
     spark.stop()
