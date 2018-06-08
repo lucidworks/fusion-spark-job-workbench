@@ -46,5 +46,12 @@ CollectionTransferApp Options:
 
 --timestampField <arg>             Timestamp field name on docs; defaults to 'timestamp_tdt'
 
+--batchSize <arg>                  Batch size for writing docs to the destination cluster; defaults to 10000
+
+--useNaturalID <arg>               Compute Natural Doc ID by concatenating fields
+
+--optimizeOutput <arg>             Optimize the destination collection to a configured number of segments. Skips optimization if value is zero; Defaults to zero
+
 --verbose                          Generate verbose log messages
+
 ----
