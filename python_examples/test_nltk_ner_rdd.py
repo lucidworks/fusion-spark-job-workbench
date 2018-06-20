@@ -102,5 +102,5 @@ newdf = spark.createDataFrame(cnn_rdd, schema)
 # newdf.cache
 
 spark.sparkContext._jvm.com.lucidworks.spark.util.DatasetLoader.sendAtomicAddsToSolr(newdf._jdf, "cnn", "id", "localhost:9983/lwfusion/4.0.0-SNAPSHOT/solr")
-
 spark.stop()
+spark.sparkContext._jvm.java.lang.System.exit(0)

@@ -18,5 +18,6 @@ public class CountDocsJavaExample {
     Dataset dataset = sparkSession.read().format("solr").option("collection", "system_history").load();
     logger.info("No. of docs in collection logs are " + dataset.count());
     sparkSession.stop();
+    System.exit(0);
   }
 }

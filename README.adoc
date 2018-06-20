@@ -74,3 +74,7 @@ For python code, define the name of the blob resource in job config.
 * Log file for custom spark jobs is located at `${FUSION_HOME}/var/log/api/spark-launcher.log`.
 * In addition to this, two files `error.log` and `output.log` are also available while the job is running. These two files can be located at `${FUSION_HOME}/var/api/spark/spark-workDir-{}/spark-launcher-{}`. The `spark-launcher-{}` directory is removed after the job finishes
 * Once the job finishes, the error and output files are available via Fusion endpoint. `http://localhost:8764/api/apollo/spark/jobs/{job_id}/error` and `http://localhost:8764/api/apollo/spark/jobs/{job_id}/output`
+
+== Notes
+
+* Add `System.exit()` at the end of your Java/Scala code or `spark.sparkContext._jvm.java.lang.System.exit(0)` at the end of python script for exiting the JVM after the application run. Sometimes hanging background threads (like ZK connections) can keep the JVM running forever even with `spark.stop()`.

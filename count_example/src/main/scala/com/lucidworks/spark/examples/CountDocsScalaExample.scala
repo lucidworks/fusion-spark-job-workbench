@@ -22,6 +22,7 @@ object CountDocsInCollection {
 //    df.count()
     logger.info("Document count is  " + df.count())
     spark.stop()
+    System.exit(0)
   }
 
 }

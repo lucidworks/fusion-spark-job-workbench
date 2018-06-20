@@ -185,7 +185,7 @@ object CollectionTransferApp extends LazyLogging {
           .longOpt("useNaturalID").build,
       CliOpt.builder()
           .hasArg
-          .desc("Optimize the desination collection to a configured number of segments. Skips optimization if value is zero")
+          .desc("Optimize the destination collection to a configured number of segments. Skips optimization if value is zero")
           .longOpt("optimizeOutput").build
     )
   }
