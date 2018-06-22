@@ -52,6 +52,8 @@ CollectionTransferApp Options:
 
 --optimizeOutput <arg>             Optimize the destination collection to a configured number of segments. Skips optimization if value is zero; Defaults to zero
 
+--splitsPerShard <arg>             Number of splits per shard while reading from Solr
+
 --verbose                          Generate verbose log messages
 
 ----

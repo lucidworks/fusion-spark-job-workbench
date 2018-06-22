@@ -42,6 +42,7 @@ object CollectionTransferApp extends LazyLogging {
     val findNewOnly = ("true" == cli.getOptionValue("findNewOnly", "true"))
     val optimizeOutput = cli.getOptionValue("optimizeOutput", "0").toInt
     val useNaturalID = cli.getOptionValue("useNaturalID", "").trim
+    val splitsPerShard = cli.getOptionValue("splitsPerShard")
     val naturalIdFields = if (!useNaturalID.isEmpty) useNaturalID.split(",").toSeq else Seq.empty
 
     logger.info(s"Fusion collection transfer running with config: sourceSolrClusterZk=${sourceSolrClusterZk}, sourceCollection=${sourceCollection}, destinationSolrClusterZk=${destinationSolrClusterZk}, destinationCollection=${destinationCollection}, sourceQuery=${sourceQuery}, findNewOnly=${findNewOnly}")
@@ -60,7 +61,14 @@ object CollectionTransferApp extends LazyLogging {
     }
 
     if (!findNewOnly || sourceFilter._2 > 0L) {
-      var readFromSourceClusterOpts = Map("zkhost" -> sourceSolrClusterZk, "collection" -> sourceCollection, "query" -> sourceQuery, "flatten_multivalued" -> "false")
+      var readFromSourceClusterOpts = Map(
+        "zkhost" -> sourceSolrClusterZk,
+        "collection" -> sourceCollection,
+        "query" -> sourceQuery,
+        "flatten_multivalued" -> "false")
+      if (splitsPerShard != null) {
+        readFromSourceClusterOpts = readFromSourceClusterOpts ++ Map("splits_per_shard" -> splitsPerShard)
+      }
       if (sourceFilter._1.isDefined) {
         readFromSourceClusterOpts = readFromSourceClusterOpts ++ Map("solr.params" -> s"fq=${sourceFilter._1.get}")
       }
@@ -186,7 +194,11 @@ object CollectionTransferApp extends LazyLogging {
       CliOpt.builder()
           .hasArg
           .desc("Optimize the destination collection to a configured number of segments. Skips optimization if value is zero")
-          .longOpt("optimizeOutput").build
+          .longOpt("optimizeOutput").build,
+      CliOpt.builder()
+          .hasArg
+          .desc("Number of splits per shard while reading from Solr")
+          .longOpt("splitsPerShard").build
     )
   }
 
