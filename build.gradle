@@ -72,11 +72,33 @@ project.ext.dcFusionHome = {
 
 def getLibs() {
     def sparkJars = fileTree(
-            dir: getSparkLibDir(dcFusionHome),
+            dir: getSparkDistJars(dcFusionHome),
             includes: ["*.jar"]
     )
-    def libsJars = files(sparkJars.files.collect { dep -> dep.getPath()})
+    def shadedJar = getShadedJar(dcFusionHome).getAbsolutePath()
+    def libsJars = files(sparkJars.files.collect { dep -> dep.getPath()}, shadedJar)
     return libsJars
+}
+
+def getShadedJar(baseDir) {
+    if (!file(baseDir).isDirectory()) {
+        throw new FileNotFoundException("Fusion home directory '${baseDir}' does not exist. To build, add " +
+                "-DdcFusionHome=<fusion_location>")
+    } else {
+        // Find the shaded jar
+        def shadedJars = new FileNameByRegexFinder().getFileNames("${baseDir}/var/api/work", "spark-shaded-").collect { f -> new File(f)}
+        def shadedJar = shadedJars.max {f1, f2 -> Long.compare(f1.lastModified(), f2.lastModified())}
+        return shadedJar
+    }
+}
+
+def getSparkDistJars(baseDir) {
+    if (!file(baseDir).isDirectory()) {
+        throw new FileNotFoundException("Fusion home directory '${baseDir}' does not exist. To build, add " +
+                "-DdcFusionHome=<fusion_location>")
+    } else {
+        return "${baseDir}/apps/spark-dist/jars"
+    }
 }
 
 def getSparkLibDir(baseDir) {
