@@ -7,4 +7,6 @@ build-support
 .idea
 *.iml
 
+*.class
+
 .DS_Store

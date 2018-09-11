@@ -24,8 +24,18 @@ subprojects {
     apply plugin: "com.github.johnrengelman.shadow"
     // Relocates everything by default. Comment out to avoid relocation
     apply plugin: "scala"
-    apply plugin: "java"
     apply plugin: 'com.github.johnrengelman.plugin-shadow'
+
+    sourceSets {
+     main {
+       scala {
+         srcDirs = ['src/main/scala', 'src/main/java']
+       }
+       java {
+         srcDirs = []
+       }
+     }
+    }
 
     dependencies {
         compileOnly getLibs()
