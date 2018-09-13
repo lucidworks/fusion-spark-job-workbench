@@ -1,0 +1,5 @@
+Instructions
+============
+
+* Compile and create jar file `./gradlew clean :fusion-indexing-app:jar`
+* Jar file will be available at fusion-indexing-app/build/libs
