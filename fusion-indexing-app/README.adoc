@@ -2,7 +2,7 @@ Instructions
 ============
 
 * Compile and create jar file `./gradlew clean :fusion-indexing-app:jar`
-* Jar file will be available at fusion-indexing-app/build/libs
+* Jar file will be available at `fusion-indexing-app/build/libs`
 * Upload the jar file as a blob using Fusion UI
 * Create a custom job with uploaded blob name as `resourceName` in job config and `mainClass` as `com.lucidworks.spark.fusion.IndexDirectoryToFusion`
 
