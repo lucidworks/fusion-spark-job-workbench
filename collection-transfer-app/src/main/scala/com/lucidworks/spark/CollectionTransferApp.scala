@@ -5,9 +5,8 @@ import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.util.Properties
 import java.util.UUID.randomUUID
-
+import org.slf4j.LoggerFactory
 import com.lucidworks.spark.util.{SolrQuerySupport, SolrSupport}
-import com.typesafe.scalalogging.LazyLogging
 import org.apache.commons.cli.{CommandLine, GnuParser, HelpFormatter, Options, ParseException, Option => CliOpt}
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.impl.CloudSolrClient
@@ -19,7 +18,10 @@ import org.apache.spark.sql.functions._
 
 import scala.collection.JavaConversions._
 
-object CollectionTransferApp extends LazyLogging {
+class CollectionTransferApp
+
+object CollectionTransferApp {
+  val logger = LoggerFactory.getLogger(classOf[CollectionTransferApp]) 
   val appName = "fusion-collection-xfer"
   val xferIdField = "_lw_xfer_id_s"
 
